@@ -16,6 +16,9 @@
 	<!-- 设置类的别名 -->
 	<typeAliases>
 		<typeAlias type="com.qfedu.entity.User" alias="User"/>
+		<typeAlias type="com.qfedu.vo.UserRole" alias="UserRole"/>
+		<typeAlias type="com.qfedu.vo.UserPermit" alias="UserPermit"/>
+		<typeAlias type="com.qfedu.entity.Loginlog" alias="Loginlog"/>
 		
 	</typeAliases>
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.UserPermitDao">
+	<resultMap id="userpermitMap" type="UserPermit">
+		<result column="no" jdbcType="VARCHAR" property="no" />
+		<result column="aicon" jdbcType="VARCHAR" property="aicon" />
+		<result column="saicon" jdbcType="VARCHAR" property="saicon" />
+		<result column="aurl" jdbcType="VARCHAR" property="aurl" />
+		<result column="saurl" jdbcType="VARCHAR" property="saurl" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="stitle" jdbcType="VARCHAR" property="stitle" />
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="sid" jdbcType="INTEGER" property="sid" />
+	</resultMap>
+
+
+	<select id="findPermitByNo" parameterType="string" resultMap="userpermitMap">
+		select u.no,a.aicon,a.saicon,a.aurl,a.saurl,a.title,a.stitle,a.id,a.sid from t_user u
+		inner join t_userrole ur
+		on u.id = ur.uid
+		inner join t_roleauthority ra
+		on ur.rid=ra.rid
+		inner join (select DISTINCT a2.id,a2.title,a2.aicon,a2.aurl,a1.title stitle,a1.aurl saurl,a1.id sid,a1.aicon saicon from t_authority a1
+		LEFT join t_authority a2
+		on a1.parentId = a2.id) a
+		on a.id=ra.aid
+		where no=#{no}
+	</select>
+</mapper>

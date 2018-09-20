@@ -4,13 +4,16 @@
 	<resultMap id="userMap" type="User">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="no" jdbcType="VARCHAR" property="no" />
-		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="password" jdbcType="VARCHAR"
+			property="password" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="flag" jdbcType="INTEGER" property="flag" />
-		<result column="headphoto" jdbcType="VARCHAR" property="headphoto"/>
+		<result column="headphoto" jdbcType="VARCHAR"
+			property="headphoto" />
 	</resultMap>
 
 	<select id="findByNo" parameterType="string" resultMap="userMap">
 		select * from t_user where no=#{no}
 	</select>
+
 </mapper>

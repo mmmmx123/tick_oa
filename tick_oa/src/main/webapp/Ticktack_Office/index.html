@@ -92,7 +92,7 @@
 </div>
 
 <script src="media/js/jquery.min.js"></script>
-<script src="media/layui/layui.js"></script>
+<script src="media/layui/layui.all.js"></script>
 <script>
     //JavaScript代码区域
     var element;
@@ -100,23 +100,21 @@
         base: 'media/layui/lay/modules/'
     }).use(['element','app'], function(){
         element = layui.element;
-        $.get("/usermenu.do",null,function (arr) {
-            var s;
-            for(i=0;i<arr.length;i++){
-                var parent=arr[i];
-                s+="<li class='layui-nav-item '> <a href='javascript:;' id='"+parent.id+"'><i class=\"fa "+parent.icon+"\"></i>&nbsp;"+parent.title+"</a>";
-                if(parent.childs.length>0){
+        $.get("../usermenu",null,function (data) {
+        	if (data.code == 0) {
+	        	var s;
+	            $(data.msg).each(function() {
+                	s+="<li class='layui-nav-item '> <a href='javascript:;' id='" + this.id + "'><i class=\"fa " + this.aicon + "\"></i>&nbsp;" + this.title + "</a>";
                     s+="<dl class='layui-nav-child'>";
-                    for(j=0;j<parent.childs.length;j++){
-                        var child=parent.childs[j];
-                        s+="<dd><a href='javascript:;' id='"+child.id+"' onclick='showTab("+child.id+",\""+child.aurl+"\",\""+child.title+"\")'>&nbsp;&nbsp;&nbsp;&nbsp;"+child.title+"</a></dd>";
-                    }
+	                $(this.son).each(function() {
+                        s+="<dd><a href='javascript:;' id='" + this.sid + "' onclick='showTab(" + this.sid + ",\""+this.saurl+"\",\"" + this.stitle + "\")'>&nbsp;&nbsp;&nbsp;&nbsp;" + this.stitle + "</a></dd>";
+                   })
                     s+="</dl>";
-                }
-                s+="</li>";
-            }
-            $("#lm").append(s);
-            element.render();
+               		s+="</li>";
+           		})
+          		$("#lm").append(s);
+            	element.render();
+			}
         });
         showTab(20000,"main.html","首页");
     });
