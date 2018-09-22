@@ -66,8 +66,8 @@
         form1=layui.form;
         tableIns = table.render({
             elem: '#tbdata'
-            , url: 'rolepage.do' //数据接口
-            , page: false //关闭分页
+            , url: '../findRoleByPage' //数据接口
+            , page: true //关闭分页
             , cols: [[ //表头
                 {field: 'id', title: '序号', sort: true, fixed: 'left'}
                 , {field: 'name', title: '角色名称'}
@@ -139,6 +139,8 @@
                 }else{
                     $("#dv1").append("<input type=\"checkbox\" name=\"rids\" value='" + arr[i].id + "' title=\"" + arr[i].info + "\">");
                 }
+             
+                
             }
             form1.render();
             layer.open({
@@ -148,11 +150,17 @@
                 content:  $('#dvlay'), //这里content是一个普通的String
                 btn: ['确认', '取消'],
                 yes: function(index, layero){
+                	/* var infos = $("input:checkbox:checked");
+                	var rids = "";
+                	$(infos).each(function() {
+                		rids += $(this).val() + ",";
+                	}) */
+                	
                     $.ajax({
-                        url: "userroleedit.do",
-                        data: $("#fm1").serialize(),
+                        url: "../userroleedit",
+                        /* data: {"id":user.id, "no":$("#uid").val(), "rids":rids}, */
                         success: function (obj) {
-                            if (obj.code == 1000) {
+                            if (obj.code == 10) {
                                 layer.msg("编辑权限成功");
                                 searchData();
                             } else {

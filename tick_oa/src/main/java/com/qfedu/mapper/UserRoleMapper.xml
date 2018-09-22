@@ -14,5 +14,33 @@
 		ON ur.rid= r.id
 		where u.no=#{no}
 	</select>
-
+	
+	<select id="findByIndexAndSize" parameterType="map" resultType="UserRole">
+		select * from (SELECT u.id,u.no,u.name,GROUP_CONCAT(t_userrole.rid SEPARATOR '/') rid,GROUP_CONCAT(t_role.info SEPARATOR '/') as info,u.flag FROM t_user u
+		INNER JOIN t_userrole
+		ON u.id=t_userrole.uid
+		INNER JOIN t_role
+		ON t_userrole.rid=t_role.id GROUP BY u.`no` ORDER BY u.id ASC) AS aaa
+		<where>
+		<if test="no != null">
+			no=#{no}
+		</if>
+		
+		<if test="flag != null">
+			and	flag=#{flag}
+		</if>
+		</where>
+		
+		limit #{index},#{size}
+		
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(1) from t_user
+	</select>
+	
+	<delete id="deleteUserRoleById" parameterType="int">
+		delete from t_userrole where uid=#{uid}
+	</delete>
+	
 </mapper>

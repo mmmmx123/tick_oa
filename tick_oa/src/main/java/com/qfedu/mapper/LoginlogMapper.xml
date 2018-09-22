@@ -14,7 +14,7 @@
 	</select>
 	
 	<select id="findByIndexAndSize" parameterType="map" resultType="Loginlog">
-		select * from t_loginlog limit #{index},#{size}
+		select * from t_loginlog order by id DESC limit #{index},#{size} 
 	</select>
 	
 	<insert id="addLoginlog" parameterType="Loginlog">

@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link rel="stylesheet" href="media/layui/css/layui.css" media="all">
 <link rel="stylesheet" href="media/css/font-awesome.min.css" media="all">
-
+<script type="text/javascript" src="media/js/jquery.min.js"></script>
 <style>
 .info-box {
 	height: 85px;
@@ -71,8 +71,7 @@
 					<span class="info-box-icon"
 						style="background-color: #00c0ef !important; color: white;">
 						<i class="fa fa-child" ></i></span>
-					<div class="info-box-content">在线人数<span
-							class="info-box-number" id="s1">90</span>
+					<div id="s1" class="info-box-content">在线人数
 					</div>
 				</div>
 			</div>
@@ -141,9 +140,25 @@
 			      ,{field: 'createtime', title: '登录时间'}
 			      ]]
 			  });
-			  
 		});
 	</script>
+
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			type:"get",
+			url:"../loginnum",
+			dataType:"json",
+			success:function(data) {
+				if (data.code == 0) {
+					var info = data.msg;
+					var html = "<span class='info-box-number' id='" +  info + "'>90</span>";
+					$("#s1").append($(html));
+				}
+			}
+		})
+	})
+</script>
 </body>
 
 </html>

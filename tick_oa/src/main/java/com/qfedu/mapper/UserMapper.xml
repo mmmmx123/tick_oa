@@ -15,5 +15,9 @@
 	<select id="findByNo" parameterType="string" resultMap="userMap">
 		select * from t_user where no=#{no}
 	</select>
+	
+	<delete id="deleteUserById" parameterType="int">
+		delete from t_user where id=#{id}
+	</delete>
 
 </mapper>

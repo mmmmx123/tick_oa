@@ -28,12 +28,29 @@
 
 	<!-- 使用指定的验证器 -->
 	<mvc:annotation-driven>
-		<mvc:path-matching suffix-pattern="false"/>
+		<mvc:path-matching suffix-pattern="false" />
+		
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper">
+					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+						<property name="dateFormat">
+							<bean class="java.text.SimpleDateFormat">
+								<constructor-arg type="java.lang.String"
+									value="yyyy-MM-dd HH:mm:ss" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</mvc:message-converters>
 	</mvc:annotation-driven>
 
 	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
 	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
 	<mvc:resources location="/" mapping="/**"></mvc:resources>
+
 
 	<!-- 视图解析器 跳转到相关jsp的资源时，只写资源的名字就可以 -->
 	<bean
@@ -43,8 +60,6 @@
 		<!-- 后缀 -->
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-
-
 
 	<!-- shiro相关 -->
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->

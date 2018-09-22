@@ -7,4 +7,6 @@ public interface UserDao {
 
 	public User findByNo(String no);
 	
+	public void deleteUserById(int id);
+	
 }

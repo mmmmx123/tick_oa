@@ -19,6 +19,9 @@
 		<typeAlias type="com.qfedu.vo.UserRole" alias="UserRole"/>
 		<typeAlias type="com.qfedu.vo.UserPermit" alias="UserPermit"/>
 		<typeAlias type="com.qfedu.entity.Loginlog" alias="Loginlog"/>
+		<typeAlias type="com.qfedu.entity.Role" alias="Role"/>
+		<typeAlias type="com.qfedu.entity.UserRoleKey" alias="UserRoleKey"/>
+		<typeAlias type="com.qfedu.entity.Authority" alias="Authority"/>
 		
 	</typeAliases>
 

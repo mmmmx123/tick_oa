@@ -1,16 +1,13 @@
-package com.qfedu.conrtoller;
+package com.qfedu.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qfedu.entity.Loginlog;
 import com.qfedu.service.LoginlogService;
-import com.qfedu.utils.AddressUtils;
-import com.qfedu.utils.IpGet;
 
 @Controller
 public class LoginlogController {
@@ -50,31 +45,25 @@ public class LoginlogController {
 		return map;
 	}
 
-	@RequestMapping("/addloginlog")
+	
+	@RequestMapping("/loginnum")
 	@ResponseBody
-	public Map<String, Object> addLoginlog(HttpServletRequest request) {
-		Loginlog ll = new Loginlog();
-		String addresses= null;
+	public Map<String, Object> loginNum() {
 		Map<String, Object> map = new HashMap<>();
-		String no = (String) SecurityUtils.getSubject().getPrincipal();
-		String ip = IpGet.getIpAddr(request);
+		PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
+		int size = 0;
+	
 		try {
-			addresses = AddressUtils.getAddresses("ip=" + ip , "UTF-8");
-			ll.setCreatetime(new Date());
-			ll.setIp(ip);
-			ll.setLocation(addresses);
-			ll.setNo(no);
-			llSer.addLoginlog(ll);
+			size = principals.asList().size();
 			map.put("code", 0);
-			map.put("data", ll);
-		} catch (UnsupportedEncodingException e) {
+			map.put("msg", size);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			map.put("code", 1);
-			map.put("data", e.getMessage());
+			map.put("msg", e.getMessage());
 		}
-
+		
 		return map;
 	}
-
 }

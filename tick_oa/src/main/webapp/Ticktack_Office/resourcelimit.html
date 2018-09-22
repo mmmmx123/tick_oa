@@ -29,17 +29,17 @@
 	<script src="media/layui/layui.js"></script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 	<script>
-        var form;
+        var form1;
 	layui.use(['table','form'], function(){
 		  var table = layui.table;
-		form=layui.form;
-        form.on('radio(level)', function (data) {
+		form1=layui.form;
+        form1.on('radio(level)', function (data) {
             changePid(data.value);
         });
 		  //第一个实例
 		  table.render({
 		    elem: '#tbdata'
-		    ,url: 'authoritylist.do' //数据接口
+		    ,url: '../authoritylist' //数据接口
 		    ,page: true //开启分页
 		    ,cols: [[ //表头
 		      {field: 'id', title: '序号', sort: true, fixed: 'left'}
@@ -52,7 +52,7 @@
                       }
 				  }
 		      ,{field: 'parentId', title: '级别', templet: function (obj) {
-					  return obj.parentId==0?"一级页面":"二级页面"}}
+					  return obj.parentid==0?"一级页面":"二级页面"}}
 		      ,{field:'right', title: '操作',toolbar:"#barop"}
 		    ]]
 		  });
@@ -79,7 +79,8 @@
 		        } else if(obj.event === 'edit'){//编辑 修改
 		        	//get传递参数有中文，必须编码
 		        	//JSON.stringify 将对象转换为字符串
-		           location.href="courseupdate.html?d="+ encodeURI(JSON.stringify(data));
+		           /* location.href="courseupdate.html?d="+ encodeURI(JSON.stringify(data)); */
+		        	loadRoles(data);
 		        }
 		});
 	});
@@ -126,6 +127,57 @@
     function setPid(obj) {
         $("#pid").val(obj.value());
     }
+    
+    function loadRoles(auth) {
+        $("#uid").val(auth.id);
+        $("#title").val(auth.title);
+        $("#aicon").val(auth.aicon);
+        $("#aurl").val(auth.aurl);
+        $("#spid").val(auth.parentid);
+        $.get("../findAllAuth", null, function (auth) {
+            $("#dv1").html("");
+            var s = auth.data;
+            for (i = 0; i < s.length; i++) {
+                if(s.id/* .indexOf(s[i].id) */ >-1){
+                    $("#dv1").append("<input type='radio' name='pid' value='0' lay-filter='level'  title='一级' checked>");
+                }else{
+                    $("#dv1").append("<input type='radio' name='pid' value='-1' lay-filter='level'   title='二级' >");
+                }
+               }
+          
+            form1.render();
+            
+            layer.open({
+                area: ['500px', '300px'],
+                title: '权限编辑',
+                type: 1,
+                content:  $('#dvlay'), //这里content是一个普通的String
+                btn: ['确认', '取消'],
+                yes: function(index, layero){
+                	var infos = $("input:checkbox:checked");
+                 	var rids = "";
+                 	$(infos).each(function() {
+                 		rids += $(this).val() + ",";
+                 	})
+                 	
+                    $.ajax({
+                        url: "../userroleedit",
+                        data: {"id":user.id, "no":$("#uid").val(), "rids":rids},
+                        success: function (obj) {
+                            if (obj.code == 0) {
+                                layer.msg("编辑权限成功");
+                                searchData();
+                            } else {
+                                layer.msg("编辑权限失败");
+                            }
+                        }
+                    })
+                    layer.close(index);
+                },cancel: function(){
+                }
+            });
+        })
+    }
 </script>
 </body>
 <div style="display: none;margin-top: 10px;width: 480px" id="dvlay">
@@ -133,26 +185,26 @@
 		<div class="layui-form-item"  >
 			<label class="layui-form-label">名称：</label>
 			<div class="layui-input-inline">
-				<input name="title" class="layui-input">
+				<input id="title" name="title" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item"  >
 			<label class="layui-form-label">图标：</label>
 			<div class="layui-input-inline">
-				<input name="aicon" class="layui-input">
+				<input id="aicon" name="aicon" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item" >
 			<label class="layui-form-label">路径：</label>
 			<div class="layui-input-inline">
-				<input name="aurl" class="layui-input">
+				<input id="aurl" name="aurl" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item" >
 			<label class="layui-form-label">级别：</label>
-			<div class="layui-input-inline">
-				<input type="radio" name="pid" value="0" lay-filter="level"  title="一级" checked>
-				<input type="radio" name="pid" value="-1" lay-filter="level"   title="二级" >
+			<div class="layui-input-inline" id="dv1">
+				<!-- <input type="radio" name="pid" value="0" lay-filter="level"  title="一级" checked>
+				<input type="radio" name="pid" value="-1" lay-filter="level"   title="二级" > -->
 			</div>
 		</div>
 		<input type="hidden" name="parentId" id="pid">
